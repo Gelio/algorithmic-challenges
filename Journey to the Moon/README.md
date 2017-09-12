@@ -5,4 +5,4 @@ https://www.hackerrank.com/challenges/journey-to-the-moon
 | | |
 | - | - |
 | Method | Union Find structure |
-| Score | 0 / 50 |
+| Score | 50 / 50 |
