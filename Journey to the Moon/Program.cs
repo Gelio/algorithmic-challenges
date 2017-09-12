@@ -12,38 +12,67 @@ namespace Journey_to_the_Moon
         class Node
         {
             public int v;
-            public Node parent;
+            public int Count = 1;
+            public int Parent = -1;
 
-            public Node(int v, Node parent = null)
+            public Node(int v)
             {
                 this.v = v;
-                this.parent = parent;
             }
         }
 
-        private Node[] nodes;
+        private readonly Node[] _nodes;
+        private readonly bool[] _isRoot;
 
         public UnionFind(int n)
         {
-            nodes = new Node[n];
+            _nodes = new Node[n];
+            _isRoot = new bool[n];
             for (int i = 0; i < n; i++)
-                nodes[i] = new Node(i);
+            {
+                _nodes[i] = new Node(i);
+                _isRoot[i] = true;
+            }
         }
 
         public int Find(int v)
         {
-            var node = nodes[v];
+            var node = _nodes[v];
 
-            while (node.parent != null)
-                node = node.parent;
+            if (node.Parent == -1)
+                return node.v;
 
-            return node.v;
+            int rootV = Find(node.Parent);
+            node.Parent = rootV;
+
+            return rootV;
         }
 
         public void Union(int v1, int v2)
         {
             int v1Root = Find(v1);
-            nodes[v1Root].parent = nodes[v2];
+            int v2Root = Find(v2);
+
+            if (v1Root == v2Root)
+                return;
+
+            _nodes[v1Root].Parent = v2Root;
+            _nodes[v2Root].Count += _nodes[v1Root].Count;
+            _isRoot[v1Root] = false;
+        }
+
+        public IEnumerable<int> GetRoots()
+        {
+            for (int v = 0; v < _isRoot.Length; v++)
+            {
+                if (_isRoot[v])
+                    yield return v;
+            }
+        }
+
+        public int GetCount(int v)
+        {
+            return _nodes[v].Count;
         }
     }
 
@@ -66,20 +95,15 @@ namespace Journey_to_the_Moon
                 unionFind.Union(person1, person2);
             }
 
-
-            int[] countrySizes = new int[peopleCount];
-
-            for (int i = 0; i < peopleCount; i++)
-            {
-                int personCountry = unionFind.Find(i);
-                countrySizes[personCountry]++;
-            }
+            List<int> countrySizes = new List<int>();
+            foreach (int root in unionFind.GetRoots())
+                countrySizes.Add(unionFind.GetCount(root));
 
             long possiblePairs = 0;
 
-            for (int i = 0; i < peopleCount; i++)
+            for (int i = 0; i < countrySizes.Count; i++)
             {
-                for (int j = i + 1; j < peopleCount; j++)
+                for (int j = i + 1; j < countrySizes.Count; j++)
                     possiblePairs += countrySizes[i] * countrySizes[j];
             }
 
