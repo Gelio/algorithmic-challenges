@@ -99,15 +99,17 @@ namespace Journey_to_the_Moon
             foreach (int root in unionFind.GetRoots())
                 countrySizes.Add(unionFind.GetCount(root));
 
-            long possiblePairs = 0;
+            ulong possiblePairs = GetPossiblePairsCount((ulong)peopleCount);
 
-            for (int i = 0; i < countrySizes.Count; i++)
-            {
-                for (int j = i + 1; j < countrySizes.Count; j++)
-                    possiblePairs += countrySizes[i] * countrySizes[j];
-            }
+            foreach (int countrySize in countrySizes)
+                possiblePairs -= GetPossiblePairsCount((ulong)countrySize);
 
             Console.WriteLine(possiblePairs);
+        }
+
+        static ulong GetPossiblePairsCount(ulong numberOfPeople)
+        {
+            return (numberOfPeople * (numberOfPeople - 1)) / 2;
         }
     }
 }
