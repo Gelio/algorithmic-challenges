@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dijkstra Shortest Reach 2", "Dijkstra Shortest Reach 2.csproj", "{59CF26FC-6A98-4EAC-9ED2-8CB8C6513997}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59CF26FC-6A98-4EAC-9ED2-8CB8C6513997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59CF26FC-6A98-4EAC-9ED2-8CB8C6513997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59CF26FC-6A98-4EAC-9ED2-8CB8C6513997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59CF26FC-6A98-4EAC-9ED2-8CB8C6513997}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A74FA259-11A1-4D69-A7A2-FB72ABFA1542}
+	EndGlobalSection
+EndGlobal
