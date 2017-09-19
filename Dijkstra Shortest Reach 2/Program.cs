@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Snakes_and_Ladders
 {
+    /**
+     * TODO: Use a binary tree for PriorityQueue
+     */
     public class PriorityQueue<T> where T : IComparable
     {
         private readonly List<T> _queue = new List<T>();
@@ -90,6 +93,9 @@ namespace Snakes_and_Ladders
         }
     }
 
+    /**
+     * TODO: Add another graph implementation using neighbor lists instead of edges matrix
+     */
     public class Graph
     {
         private readonly int?[,] _edges;
