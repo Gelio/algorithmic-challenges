@@ -1,3 +1,6 @@
-# HackerRank Solutions
+# Programming algorithmic challenges
 
-[HackerRank](https://www.hackerrank.com/) challenges solutions
+My solutions to algorithmic challenges from:
+
+- [HackerRank](https://www.hackerrank.com/)
+- [LeetCode](https://leetcode.com/)
