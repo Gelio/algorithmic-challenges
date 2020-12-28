@@ -33,18 +33,6 @@ impl Default for Sequence {
     }
 }
 
-struct SequencePtr {
-    sequence: Rc<RefCell<Sequence>>,
-}
-
-impl Debug for SequencePtr {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("SequencePtr")
-            .field("sequence", &self.sequence.borrow())
-            .finish()
-    }
-}
-
 struct Solution {}
 
 impl Solution {
@@ -56,72 +44,59 @@ impl Solution {
     pub fn longest_consecutive_ref(nums: &Vec<i32>) -> i32 {
         // TODO: try using references and lifetime parameters
         // Holds the sequence of which the number is a part of
-        let mut nums_set: HashMap<i32, Rc<RefCell<SequencePtr>>> = HashMap::new();
-        let mut longest_sequence: Option<Rc<RefCell<Sequence>>> = None;
+        let mut num_sequences: HashMap<i32, Rc<RefCell<Sequence>>> = HashMap::new();
+        let mut longest_sequence_len: Option<i32> = None;
 
-        let mut update_longest_sequence = |s: &Rc<RefCell<Sequence>>| match &longest_sequence {
-            Some(longest_s) if longest_s.borrow().len >= s.borrow().len => {}
+        let mut update_longest_sequence = |sequence_len: i32| match &longest_sequence_len {
+            Some(longest_s) if *longest_s >= sequence_len => {}
             _ => {
-                longest_sequence = Some(Rc::clone(s));
+                longest_sequence_len = Some(sequence_len);
             }
         };
 
         nums.iter().cloned().for_each(|num| {
-            if nums_set.get(&num).is_some() {
+            if num_sequences.get(&num).is_some() {
                 return;
             }
 
-            let seq_ptr = match (nums_set.get(&(num - 1)), nums_set.get(&(num + 1))) {
+            let sequence = match (num_sequences.get(&(num - 1)), num_sequences.get(&(num + 1))) {
                 (Some(a), Some(b)) => {
                     // Join both sequences. Join only the sequences for a.from and b.to pointers
-                    let from = a.borrow().sequence.borrow().from;
-                    let to = b.borrow().sequence.borrow().to;
-                    let joined_sequence = Self::join_sequences(&nums_set, from, to);
+                    let from = a.borrow().from;
+                    let to = b.borrow().to;
 
-                    Rc::clone(joined_sequence)
+                    Self::join_sequences(&mut num_sequences, from, to)
                 }
-                (Some(seq_ptr), None) | (None, Some(seq_ptr)) => {
+                (Some(seq_ref), None) | (None, Some(seq_ref)) => {
                     // Append/prepend to a single sequence
-                    let borrowed_seq_ptr = seq_ptr.borrow();
-                    let mut sequence = borrowed_seq_ptr.sequence.borrow_mut();
+                    let mut sequence = seq_ref.borrow_mut();
                     sequence.len += 1;
                     sequence.from = min(sequence.from, num);
                     sequence.to = max(sequence.to, num);
 
-                    Rc::clone(seq_ptr)
+                    Rc::clone(seq_ref)
                 }
-                (None, None) => {
-                    let sequence = Rc::new(RefCell::new(Sequence {
-                        len: 1,
-                        from: num,
-                        to: num,
-                    }));
-
-                    Rc::new(RefCell::new(SequencePtr { sequence }))
-                }
+                (None, None) => Rc::new(RefCell::new(Sequence::new(num, num))),
             };
 
-            update_longest_sequence(&seq_ptr.borrow().sequence);
-            nums_set.insert(num, seq_ptr);
+            update_longest_sequence(sequence.borrow().len);
+            num_sequences.insert(num, sequence);
         });
 
-        longest_sequence.unwrap_or_default().borrow().len
+        longest_sequence_len.unwrap_or_default()
     }
 
     fn join_sequences(
-        sequence_map: &HashMap<i32, Rc<RefCell<SequencePtr>>>,
+        sequence_map: &mut HashMap<i32, Rc<RefCell<Sequence>>>,
         from: i32,
         to: i32,
-    ) -> &Rc<RefCell<SequencePtr>> {
-        let s1 = sequence_map.get(&from).unwrap();
-        let s2 = sequence_map.get(&to).unwrap();
-
+    ) -> Rc<RefCell<Sequence>> {
         let joined_sequence = Rc::new(RefCell::new(Sequence::new(from, to)));
 
-        s2.borrow_mut().sequence = Rc::clone(&joined_sequence);
-        s1.borrow_mut().sequence = joined_sequence;
+        sequence_map.insert(from, Rc::clone(&joined_sequence));
+        sequence_map.insert(to, Rc::clone(&joined_sequence));
 
-        &s1
+        joined_sequence
     }
 }
 
