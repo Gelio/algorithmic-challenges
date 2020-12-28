@@ -42,7 +42,6 @@ impl Solution {
     }
 
     pub fn longest_consecutive_ref(nums: &Vec<i32>) -> i32 {
-        // TODO: try using references and lifetime parameters
         // Holds the sequence of which the number is a part of
         let mut num_sequences: HashMap<i32, Rc<RefCell<Sequence>>> = HashMap::new();
         let mut longest_sequence_len: Option<i32> = None;
