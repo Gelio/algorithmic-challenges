@@ -33,7 +33,7 @@ impl Default for Sequence {
     }
 }
 
-struct Solution {}
+pub struct Solution {}
 
 impl Solution {
     #[allow(dead_code)]
@@ -96,6 +96,29 @@ impl Solution {
         sequence_map.insert(to, Rc::clone(&joined_sequence));
 
         joined_sequence
+    }
+
+    pub fn longest_consecutive_array_sort(mut nums: Vec<i32>) -> i32 {
+        if nums.is_empty() {
+            return 0;
+        }
+
+        nums.sort();
+        let mut longest_sequence_len = 1;
+        let mut sequence_len = 1;
+        let mut prev = nums[0];
+
+        nums[1..].iter().cloned().for_each(|num| {
+            if num == prev || num == prev + 1 {
+                sequence_len += 1;
+                prev = num;
+                if sequence_len > longest_sequence_len {
+                    longest_sequence_len = sequence_len;
+                }
+            }
+        });
+
+        longest_sequence_len
     }
 }
 
