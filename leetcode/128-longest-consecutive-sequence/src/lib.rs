@@ -38,10 +38,10 @@ pub struct Solution {}
 impl Solution {
     #[allow(dead_code)]
     pub fn longest_consecutive(nums: Vec<i32>) -> i32 {
-        Self::longest_consecutive_ref(&nums)
+        Self::longest_consecutive_hashmap(&nums)
     }
 
-    pub fn longest_consecutive_ref(nums: &Vec<i32>) -> i32 {
+    pub fn longest_consecutive_hashmap(nums: &Vec<i32>) -> i32 {
         // Holds the sequence of which the number is a part of
         let mut num_sequences: HashMap<i32, Rc<RefCell<Sequence>>> = HashMap::new();
         let mut longest_sequence_len: Option<i32> = None;
@@ -133,7 +133,7 @@ mod tests {
 
     impl TestCase {
         fn run(&self) {
-            let output = Solution::longest_consecutive_ref(&self.input);
+            let output = Solution::longest_consecutive_hashmap(&self.input);
 
             assert_eq!(output, self.expected_output);
         }
