@@ -1,6 +1,12 @@
+mod grid;
+use grid::Solver;
+
 impl Solution {
+    #[allow(dead_code)]
     pub fn unique_paths_iii(grid: Vec<Vec<i32>>) -> i32 {
-        0
+        let mut solver = Solver::new(grid).expect("Error when constructing grid");
+
+        solver.get_unique_paths_count(&solver.start.clone())
     }
 }
 
@@ -28,6 +34,11 @@ mod tests {
                 name: "Example 2",
                 grid: vec![vec![1, 0, 0, 0], vec![0, 0, 0, 0], vec![0, 0, 0, 2]],
                 paths: 4,
+            },
+            TestCase {
+                name: "Example 3",
+                grid: vec![vec![0, 1], vec![2, 0]],
+                paths: 0,
             },
         ];
 
